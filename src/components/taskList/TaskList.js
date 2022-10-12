@@ -1,16 +1,27 @@
-import React from 'react';
-import Task from '../task/Task';
-import './TaskList.css'
+import React from "react";
+import Task from "../task/Task";
+import "./TaskList.css";
 
-const TaskList = ({ todos, onDeleted }) => {
-    const elements = todos.map((item) => {
-        return <Task key={ item.id } { ...item } onDeleted={onDeleted}/>
-    })
+const TaskList = ({ todos, onDeleted, onToggleDone, onEditingTask, onSaveItem }) => {
+  const elements = todos.map((item) => {
     return (
-        <ul className='todo-list'>
-            { elements }
-        </ul>
-    )
-}
+      <li key={item.id} className={item.className}>
+        <Task {...item} 
+            onDeleted={onDeleted} 
+            onToggleDone={ onToggleDone }
+            onEditingTask={ onEditingTask }/>
+        {item.className === "editing" && (
+          <input type="text" className="edit"
+            defaultValue={item.description}
+            onKeyDown={(e) => {
+                if (e.key === "Enter") onSaveItem(e.target.value, item.id);
+              }}
+          />
+        )}
+      </li>
+    );
+  });
+  return <ul className="todo-list">{elements}</ul>;
+};
 
-export default TaskList
+export default TaskList;
