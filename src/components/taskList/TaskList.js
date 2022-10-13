@@ -4,13 +4,14 @@ import "./TaskList.css";
 
 const TaskList = ({ todos, onDeleted, onToggleDone, onEditingTask, onSaveItem }) => {
   const elements = todos.map((item) => {
+    const classNames = item.status
     return (
-      <li key={item.id} className={item.className}>
+      <li key={item.id} className={classNames}>
         <Task {...item} 
             onDeleted={onDeleted} 
             onToggleDone={ onToggleDone }
             onEditingTask={ onEditingTask }/>
-        {item.className === "editing" && (
+        {classNames === "editing" && (
           <input type="text" className="edit"
             defaultValue={item.description}
             onKeyDown={(e) => {

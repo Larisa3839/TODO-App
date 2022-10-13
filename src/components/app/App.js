@@ -8,10 +8,19 @@ import './App.css'
 export default class App extends Component {
     state = {
         todoData: [
-            { id: 1, className: 'completed', description: 'Completed task', done: false},
-            { id: 2, description: 'Editing task', done: false},
-            { id: 3, description: 'Active task', done: false}
-        ]
+            { id: 1, status: 'active', description: 'Completed task', done: false},
+            { id: 2, status: 'active', description: 'Editing task', done: false},
+            { id: 3, status: 'active', description: 'Active task', done: false}
+        ],
+        filter: 'All'
+    }
+
+    filterChenge = (filter) => {
+        this.setState({ filter })
+    }
+
+    clearCompleted = () => {
+        this.setState({ todoData: this.state.todoData.filter((item) => !item.done)})
     }
 
     maxId = 4
@@ -19,8 +28,9 @@ export default class App extends Component {
     toggleDone = (checked, id) => {
         this.setState( ({ todoData }) => {
             const index = todoData.findIndex((item) => item.id === id)
-            const newItem = { ...todoData[index], className: checked ? 'completed' : '' , done: checked }
-            let newArrData = [ ...todoData.slice(0, index), newItem, ...todoData.slice(index+1) ]
+            let newArrData = [ ...todoData ]
+            newArrData[index].status = checked ? 'completed' : ''
+            newArrData[index].done = checked
             return {
                 todoData: newArrData
             }
@@ -31,7 +41,7 @@ export default class App extends Component {
         this.setState(({ todoData }) => {
             const index = todoData.findIndex((item) => item.id === id)
             let copyArrData = [ ...todoData ]
-            copyArrData[index].className = 'editing'
+            copyArrData[index].status = 'editing'
             return {
                 todoData: copyArrData
             }
@@ -39,16 +49,13 @@ export default class App extends Component {
     }
 
     delleteItem = (id) => {
-        this.setState(({ todoData }) => {
-            return {
-                todoData: todoData.filter((item) => item.id !== id)
-            } 
-        })
+        this.setState({ todoData: this.state.todoData.filter((item) => item.id !== id) })
     }
 
     addItem = (e) => {
         const newItem = {
             id: this.maxId++,
+            status: 'active',
             description: e.target.value,
             done: false
         }
@@ -64,12 +71,11 @@ export default class App extends Component {
     }
 
     saveItem = (text, id) => {
-        console.log(text, id)
         this.setState(({ todoData }) => {
             const index = todoData.findIndex((item) => item.id === id)
             let copyArrData = [ ...todoData ]
             copyArrData[index].description = text
-            copyArrData[index].className = ''
+            copyArrData[index].status = ''
             return {
                 todoData: copyArrData
             }
@@ -77,6 +83,13 @@ export default class App extends Component {
     }
     
     render() {
+        const filterNotes = {
+            'All': this.state.todoData,
+            'Active': this.state.todoData.filter((item) => !item.done),
+            'Completed': this.state.todoData.filter((item) => item.done)
+        }
+        const { filter } = this.state
+        const todos = filterNotes[filter]
         return (
             <section className='todoapp'>
                 <header className="header">
@@ -86,11 +99,12 @@ export default class App extends Component {
                 <section className='main'>
                     <TaskList 
                     onDeleted={ this.delleteItem } 
-                    todos={ this.state.todoData }
+                    todos={ todos }
                     onToggleDone={ this.toggleDone }
                     onEditingTask={ this.editingTask }
                     onSaveItem={ this.saveItem }/>    
-                    <Footer />
+                    <Footer onFilterChenge={ this.filterChenge }
+                            onClearCompleted={ this.clearCompleted }/>
                 </section>
             </section>
         )

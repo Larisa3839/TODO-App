@@ -3,12 +3,12 @@ import TasksFilter from '../taskFilter';
 
 import './Footer.css'
 
-const Footer = () => {
+const Footer = ({onFilterChenge, onClearCompleted}) => {
     return (
         <footer className="footer">
           <span className="todo-count">1 items left</span>
-          <TasksFilter />
-          <button className="clear-completed">Clear completed</button>
+          <TasksFilter onFilterChenge={onFilterChenge}/>
+          <button className="clear-completed" onClick={() => onClearCompleted()}>Clear completed</button>
         </footer>
     )
 }

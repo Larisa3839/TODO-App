@@ -1,17 +1,17 @@
 import React from 'react';
 import './TasksFilter.css'
 
-const TasksFilter = () => {
+const TasksFilter = ({onFilterChenge}) => {
     return (
         <ul className="filters">
             <li>
-              <button className="selected">All</button>
+              <button className="selected" onClick={() => onFilterChenge('All')}>All</button>
             </li>
             <li>
-              <button>Active</button>
+              <button onClick={() => onFilterChenge('Active')}>Active</button>
             </li>
             <li>
-              <button>Completed</button>
+              <button onClick={() => onFilterChenge('Completed')}>Completed</button>
             </li>
           </ul>
     )
