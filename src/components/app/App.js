@@ -90,6 +90,7 @@ export default class App extends Component {
         }
         const { filter } = this.state
         const todos = filterNotes[filter]
+        const activeCount = this.state.todoData.filter((el) => !el.done).length
         return (
             <section className='todoapp'>
                 <header className="header">
@@ -104,7 +105,8 @@ export default class App extends Component {
                     onEditingTask={ this.editingTask }
                     onSaveItem={ this.saveItem }/>    
                     <Footer onFilterChenge={ this.filterChenge }
-                            onClearCompleted={ this.clearCompleted }/>
+                            onClearCompleted={ this.clearCompleted }
+                            activeCount={activeCount}/>
                 </section>
             </section>
         )
