@@ -6,13 +6,24 @@ import Footer from '../footer'
 import './App.css'
 
 export default class App extends Component {
+    maxId = 1
     state = {
         todoData: [
-            { id: 1, status: 'active', description: 'Completed task', done: false},
-            { id: 2, status: 'active', description: 'Editing task', done: false},
-            { id: 3, status: 'active', description: 'Active task', done: false}
+            this.createItem('Item 1'),
+            this.createItem('Item 2'),
+            this.createItem('Item 3')
         ],
         filter: 'All'
+    }
+
+    createItem(text) {
+        return {
+            id: this.maxId++,
+            status: 'active',
+            description: text,
+            done: false,
+            create: new Date()
+        }
     }
 
     filterChenge = (filter) => {
@@ -23,13 +34,11 @@ export default class App extends Component {
         this.setState({ todoData: this.state.todoData.filter((item) => !item.done)})
     }
 
-    maxId = 4
-
     toggleDone = (checked, id) => {
         this.setState( ({ todoData }) => {
             const index = todoData.findIndex((item) => item.id === id)
             let newArrData = [ ...todoData ]
-            newArrData[index].status = checked ? 'completed' : ''
+            newArrData[index].status = checked ? 'completed' : 'active'
             newArrData[index].done = checked
             return {
                 todoData: newArrData
@@ -53,20 +62,12 @@ export default class App extends Component {
     }
 
     addItem = (e) => {
-        const newItem = {
-            id: this.maxId++,
-            status: 'active',
-            description: e.target.value,
-            done: false
-        }
-
+        const newItem = this.createItem(e.target.value)
         this.setState(({ todoData }) => {
-            const newData = [...todoData, newItem ]
             return {
-                todoData: newData
+                todoData: [...todoData, newItem ]
             }
         })
-
         e.target.value = ''
     }
 
@@ -83,14 +84,17 @@ export default class App extends Component {
     }
     
     render() {
+        const { todoData, filter } = this.state
+
         const filterNotes = {
-            'All': this.state.todoData,
-            'Active': this.state.todoData.filter((item) => !item.done),
-            'Completed': this.state.todoData.filter((item) => item.done)
+            'All': todoData,
+            'Active': todoData.filter((item) => !item.done),
+            'Completed': todoData.filter((item) => item.done)
         }
-        const { filter } = this.state
+        
         const todos = filterNotes[filter]
-        const activeCount = this.state.todoData.filter((el) => !el.done).length
+        const activeCount = todoData.filter((el) => !el.done).length
+
         return (
             <section className='todoapp'>
                 <header className="header">
@@ -98,15 +102,14 @@ export default class App extends Component {
                     <NewTaskForm autoFocus onAdd={ this.addItem }/>
                 </header>
                 <section className='main'>
-                    <TaskList 
-                    onDeleted={ this.delleteItem } 
-                    todos={ todos }
-                    onToggleDone={ this.toggleDone }
-                    onEditingTask={ this.editingTask }
-                    onSaveItem={ this.saveItem }/>    
+                    <TaskList onDeleted={ this.delleteItem } 
+                        todos={ todos }
+                        onToggleDone={ this.toggleDone }
+                        onEditingTask={ this.editingTask }
+                        onSaveItem={ this.saveItem }/>    
                     <Footer onFilterChenge={ this.filterChenge }
-                            onClearCompleted={ this.clearCompleted }
-                            activeCount={activeCount}/>
+                        onClearCompleted={ this.clearCompleted }
+                        activeCount={activeCount}/>
                 </section>
             </section>
         )
