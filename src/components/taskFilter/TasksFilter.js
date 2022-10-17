@@ -3,16 +3,14 @@ import React from 'react';
 import './TasksFilter.css'
 
 const TasksFilter = ({onFilterChenge}) => {
-  let classNames = ''
+
   const filterChenge = (e) => {
-
-    switch (e.target.innerText) {
-      case 'All': onFilterChenge('All'); break;
-      case 'Active': onFilterChenge('Active'); break;
-      case 'Completed': onFilterChenge('Completed'); break;
-    }
-
-    e.target.classList.add('selected')
+    e.currentTarget.childNodes.forEach((li) => {
+      if(li.children[0] === e.target) {
+        onFilterChenge(e.target.innerText)
+        e.target.classList.add('selected')
+      } else li.children[0].classList.remove('selected')
+    })
   }
     return (
         <ul className="filters" onClick={ (e) => filterChenge(e) }>
