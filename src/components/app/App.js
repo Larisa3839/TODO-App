@@ -76,7 +76,7 @@ export default class App extends Component {
             const index = todoData.findIndex((item) => item.id === id)
             let copyArrData = [ ...todoData ]
             copyArrData[index].description = text
-            copyArrData[index].status = ''
+            copyArrData[index].status = copyArrData[index].done ? 'completed' : 'active'
             return {
                 todoData: copyArrData
             }

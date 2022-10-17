@@ -1,13 +1,25 @@
-import React from 'react';
-import './NewTaskForm.css'
+import React from "react";
+import PropTypes from "prop-types";
+import "./NewTaskForm.css";
 
 const NewTaskForm = ({ onAdd }) => {
-    return (
-        <input className='new-todo' placeholder="What needs to be done?" 
-        onKeyDown={(e) => {
-            if (e.key === "Enter") onAdd(e);
-          }} />
-    )
-}
+  return (
+    <input
+      className="new-todo"
+      placeholder="What needs to be done?"
+      onKeyDown={(e) => {
+        if (e.key === "Enter") onAdd(e);
+      }}
+    />
+  );
+};
 
-export default NewTaskForm
+NewTaskForm.defaultProps = {
+    onAdd: () => {},
+};
+
+NewTaskForm.propTypes = {
+    onAdd: PropTypes.func,
+};
+
+export default NewTaskForm;

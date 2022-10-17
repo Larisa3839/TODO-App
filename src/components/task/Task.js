@@ -5,11 +5,11 @@ import {formatDistanceToNow} from 'date-fns'
 export default class Task extends Component {
 
   render() {
-    const { id, description, create } = this.props
+    const { id, description, create, done } = this.props
 
     return (
         <div className="view">
-          <input className="toggle" type="checkbox" onChange={ (e) => this.props.onToggleDone(e.target.checked, id) }/>
+          <input className="toggle" type="checkbox" checked={ done } onChange={ (e) => this.props.onToggleDone(e.target.checked, id) }/>
           <label>
             <span className="description">{ description }</span>
             <span className="created">{ formatDistanceToNow(create) }</span>
