@@ -26,7 +26,7 @@ Task.defaultProps = {
 Task.propTypes = {
   id: PropTypes.number.isRequired,
   description: PropTypes.string.isRequired,
-  create: PropTypes.string.isRequired,
+  create: PropTypes.object.isRequired,
   done: PropTypes.bool.isRequired,
   onDeleted: PropTypes.func,
   onToggleDone: PropTypes.func,

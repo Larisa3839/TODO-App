@@ -9,7 +9,7 @@ import './App.css'
 export default class App extends Component {
   maxId = 1
 
-  static createItem(text) {
+  createItem(text) {
     return {
       id: this.maxId++,
       status: 'active',
