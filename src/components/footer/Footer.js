@@ -1,21 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import TasksFilter from '../taskFilter';
+import React from 'react'
+import PropTypes from 'prop-types'
+
+import TasksFilter from '../taskFilter'
 
 import './Footer.css'
 
-const Footer = ({onFilterChenge, onClearCompleted, activeCount}) => {
-    return (
-        <footer className="footer">
-          <span className="todo-count">{activeCount} items left</span>
-          <TasksFilter onFilterChenge={onFilterChenge}/>
-          <button className="clear-completed" onClick={() => onClearCompleted()}>Clear completed</button>
-        </footer>
-    )
+function Footer({ onFilterChenge, onClearCompleted, activeCount }) {
+  return (
+    <footer className="footer">
+      <span className="todo-count">{activeCount} items left</span>
+      <TasksFilter onFilterChenge={onFilterChenge} />
+      <button type="button" className="clear-completed" onClick={() => onClearCompleted()}>
+        Clear completed
+      </button>
+    </footer>
+  )
 }
 
 Footer.defaultProps = {
-  activeCount: 0,
   onFilterChenge: () => {},
   onClearCompleted: () => {},
 }
