@@ -18,7 +18,7 @@ export default class App extends Component {
   }
 
   state = {
-    todoData: [this.createItem('Item 1'), this.createItem('Item 2'), this.createItem('Item 3')],
+    todoData: [this.createItem('Item 1352'), this.createItem('Item 547'), this.createItem('Item 965957')],
     filter: 'All',
   }
 
