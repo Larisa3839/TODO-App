@@ -1,31 +1,51 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './TasksFilter.css'
 
-function TasksFilter({ onFilterChenge }) {
-  const filterChenge = (e) => {
-    e.currentTarget.childNodes.forEach((li) => {
-      if (li.children[0] === e.target) {
-        onFilterChenge(e.target.innerText)
-        e.target.classList.add('selected')
-      } else li.children[0].classList.remove('selected')
-    })
+export default class TasksFilter extends Component {
+  state = {
+    buttons: [
+      {
+        name: 'All',
+        active: true,
+      },
+      {
+        name: 'Active',
+        active: false,
+      },
+      {
+        name: 'Completed',
+        active: false,
+      },
+    ],
   }
-  return (
-    <ul className="filters" onClick={(e) => filterChenge(e)}>
-      <li>
-        <button type="button" className="selected">
-          All
-        </button>
-      </li>
-      <li>
-        <button type="button">Active</button>
-      </li>
-      <li>
-        <button type="button">Completed</button>
-      </li>
-    </ul>
-  )
+
+  filterChange = (name) => {
+    const { onFilterChenge } = this.props
+    this.setState(({ buttons }) => {
+      const newArr = buttons.map((item) => {
+        item.active = item.name === name
+        return item
+      })
+      return { buttons: newArr }
+    })
+    onFilterChenge(name)
+  }
+
+  render() {
+    const { buttons } = this.state
+    const filterButtons = buttons.map((item) => {
+      const classNames = item.active ? 'selected' : ''
+      return (
+        <li key={item.name}>
+          <button type="button" className={classNames} onClick={() => this.filterChange(item.name)}>
+            {item.name}
+          </button>
+        </li>
+      )
+    })
+    return <ul className="filters">{filterButtons}</ul>
+  }
 }
 
 TasksFilter.defaultProps = {
@@ -35,5 +55,3 @@ TasksFilter.defaultProps = {
 TasksFilter.propTypes = {
   onFilterChenge: PropTypes.func,
 }
-
-export default TasksFilter

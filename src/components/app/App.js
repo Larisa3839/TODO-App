@@ -1,21 +1,19 @@
 import React, { Component } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
-import NewTaskForm from '../newTaskForm'
-import TaskList from '../taskList'
-import Footer from '../footer'
+import NewTaskForm from '../NewTaskForm'
+import TaskList from '../TaskList'
+import Footer from '../Footer'
 
 import './App.css'
 
 export default class App extends Component {
-  maxId = 1
-
   createItem(text) {
     return {
-      id: this.maxId++,
-      status: 'active',
+      id: uuidv4(),
       description: text,
       done: false,
-      create: new Date(),
+      create: new Date('2/1/22'),
     }
   }
 
@@ -32,25 +30,13 @@ export default class App extends Component {
     this.setState({ todoData: this.state.todoData.filter((item) => !item.done) })
   }
 
-  toggleDone = (checked, id) => {
+  toggleDone = (id) => {
     this.setState(({ todoData }) => {
       const index = todoData.findIndex((item) => item.id === id)
       let newArrData = [...todoData]
-      newArrData[index].status = checked ? 'completed' : 'active'
-      newArrData[index].done = checked
+      newArrData[index].done = !todoData[index].done
       return {
         todoData: newArrData,
-      }
-    })
-  }
-
-  editingTask = (id) => {
-    this.setState(({ todoData }) => {
-      const index = todoData.findIndex((item) => item.id === id)
-      let copyArrData = [...todoData]
-      copyArrData[index].status = 'editing'
-      return {
-        todoData: copyArrData,
       }
     })
   }
@@ -59,14 +45,13 @@ export default class App extends Component {
     this.setState({ todoData: this.state.todoData.filter((item) => item.id !== id) })
   }
 
-  addItem = (e) => {
-    const newItem = this.createItem(e.target.value)
+  addItem = (text) => {
+    const newItem = this.createItem(text)
     this.setState(({ todoData }) => {
       return {
         todoData: [...todoData, newItem],
       }
     })
-    e.target.value = ''
   }
 
   saveItem = (text, id) => {
@@ -74,7 +59,6 @@ export default class App extends Component {
       const index = todoData.findIndex((item) => item.id === id)
       let copyArrData = [...todoData]
       copyArrData[index].description = text
-      copyArrData[index].status = copyArrData[index].done ? 'completed' : 'active'
       return {
         todoData: copyArrData,
       }
@@ -104,7 +88,6 @@ export default class App extends Component {
             onDeleted={this.delleteItem}
             todos={todos}
             onToggleDone={this.toggleDone}
-            onEditingTask={this.editingTask}
             onSaveItem={this.saveItem}
           />
           <Footer onFilterChenge={this.filterChenge} onClearCompleted={this.clearCompleted} activeCount={activeCount} />

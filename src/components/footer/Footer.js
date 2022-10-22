@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import TasksFilter from '../taskFilter'
+import TasksFilter from '../TaskFilter'
 
 import './Footer.css'
 
