@@ -8,17 +8,21 @@ import Footer from '../Footer'
 import './App.css'
 
 export default class App extends Component {
-  createItem(text) {
+  createItem(text, date) {
     return {
       id: uuidv4(),
       description: text,
       done: false,
-      create: new Date('2/1/22'),
+      create: date,
     }
   }
 
   state = {
-    todoData: [this.createItem('Item 1352'), this.createItem('Item 547'), this.createItem('Item 965957')],
+    todoData: [
+      this.createItem('Item 1352', new Date('4/28/22')),
+      this.createItem('Item 547', new Date('9/20/22')),
+      this.createItem('Item 965957', new Date('10/18/22')),
+    ],
     filter: 'All',
   }
 
@@ -46,7 +50,7 @@ export default class App extends Component {
   }
 
   addItem = (text) => {
-    const newItem = this.createItem(text)
+    const newItem = this.createItem(text, new Date())
     this.setState(({ todoData }) => {
       return {
         todoData: [...todoData, newItem],
@@ -90,7 +94,12 @@ export default class App extends Component {
             onToggleDone={this.toggleDone}
             onSaveItem={this.saveItem}
           />
-          <Footer onFilterChenge={this.filterChenge} onClearCompleted={this.clearCompleted} activeCount={activeCount} />
+          <Footer
+            filter={filter}
+            onFilterChenge={this.filterChenge}
+            onClearCompleted={this.clearCompleted}
+            activeCount={activeCount}
+          />
         </section>
       </section>
     )

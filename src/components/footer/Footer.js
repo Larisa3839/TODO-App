@@ -5,11 +5,11 @@ import TasksFilter from '../TaskFilter'
 
 import './Footer.css'
 
-function Footer({ onFilterChenge, onClearCompleted, activeCount }) {
+function Footer({ onFilterChenge, onClearCompleted, activeCount, filter }) {
   return (
     <footer className="footer">
       <span className="todo-count">{activeCount} items left</span>
-      <TasksFilter onFilterChenge={onFilterChenge} />
+      <TasksFilter onFilterChenge={onFilterChenge} filter={filter} />
       <button type="button" className="clear-completed" onClick={() => onClearCompleted()}>
         Clear completed
       </button>

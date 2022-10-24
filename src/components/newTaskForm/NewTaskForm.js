@@ -3,29 +3,36 @@ import PropTypes from 'prop-types'
 import './NewTaskForm.css'
 
 export default class NewTaskForm extends Component {
-  state = {
-    value: '',
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: '',
+    }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleChange = (e) => {
-    const { onAdd } = this.props
     this.setState({ value: e.target.value })
-    if (e.key === 'Enter') {
-      onAdd(e.target.value)
-      e.target.value = ''
-    }
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault()
+    this.props.onAdd(this.state.value)
+    e.target[0].value = ''
   }
 
   render() {
-    const { value } = this.state
-    console.log(value)
     return (
-      <input
-        className="new-todo"
-        placeholder="What needs to be done?"
-        defaultValue={value}
-        onKeyDown={this.handleChange}
-      />
+      <form onSubmit={this.handleSubmit}>
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          defaultValue={this.state.value}
+          onChange={this.handleChange}
+        />
+      </form>
     )
   }
 }

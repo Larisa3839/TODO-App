@@ -4,46 +4,27 @@ import './TasksFilter.css'
 
 export default class TasksFilter extends Component {
   state = {
-    buttons: [
-      {
-        name: 'All',
-        active: true,
-      },
-      {
-        name: 'Active',
-        active: false,
-      },
-      {
-        name: 'Completed',
-        active: false,
-      },
-    ],
+    buttons: ['All', 'Active', 'Completed'],
   }
 
   filterChange = (name) => {
-    const { onFilterChenge } = this.props
-    this.setState(({ buttons }) => {
-      const newArr = buttons.map((item) => {
-        item.active = item.name === name
-        return item
-      })
-      return { buttons: newArr }
-    })
-    onFilterChenge(name)
+    this.props.onFilterChenge(name)
   }
 
   render() {
     const { buttons } = this.state
-    const filterButtons = buttons.map((item) => {
-      const classNames = item.active ? 'selected' : ''
+
+    const filterButtons = buttons.map((el) => {
+      const classNames = el === this.props.filter ? 'selected' : ''
       return (
-        <li key={item.name}>
-          <button type="button" className={classNames} onClick={() => this.filterChange(item.name)}>
-            {item.name}
+        <li key={el}>
+          <button type="button" className={classNames} onClick={() => this.filterChange(el)}>
+            {el}
           </button>
         </li>
       )
     })
+
     return <ul className="filters">{filterButtons}</ul>
   }
 }

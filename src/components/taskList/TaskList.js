@@ -5,10 +5,16 @@ import Task from '../Task/Task'
 import './TaskList.css'
 
 export default class TaskList extends Component {
-  state = {
-    id: null,
-    edit: false,
-    description: null,
+  constructor(props) {
+    super(props)
+    this.state = {
+      id: null,
+      edit: false,
+      description: '',
+    }
+
+    this.handleTaskChange = this.handleTaskChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   clickEditTask = (id, description) => {
@@ -19,33 +25,43 @@ export default class TaskList extends Component {
     })
   }
 
-  onSubmit = (description, id) => {
+  handleTaskChange = (e) => {
+    this.setState({ description: e.target.value })
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault()
+    const { id, description } = this.state
     const { onSaveItem } = this.props
     onSaveItem(description, id)
-    this.setState({ edit: false, description })
+    this.setState({ edit: false })
   }
 
   render() {
     const { todos, onDeleted, onToggleDone } = this.props
     const { id, edit, description } = this.state
+
     const elements = todos.map((item) => {
       const classNames = item.done ? 'completed' : ''
-      return (
-        <li key={item.id} className={edit && id === item.id ? 'editing' : classNames}>
+
+      const editForm =
+        edit && item.id === id ? (
+          <li key={item.id} className="editing">
+            <form onSubmit={this.handleSubmit}>
+              <input type="text" className="edit" defaultValue={description} onChange={this.handleTaskChange} />
+            </form>
+          </li>
+        ) : null
+
+      const task = !editForm ? (
+        <li key={item.id} className={classNames}>
           <Task {...item} onDeleted={onDeleted} onToggleDone={onToggleDone} clickEditTask={this.clickEditTask} />
-          {edit && (
-            <input
-              type="text"
-              className="edit"
-              defaultValue={description}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') this.onSubmit(e.target.value, item.id)
-              }}
-            />
-          )}
         </li>
-      )
+      ) : null
+
+      return editForm || task
     })
+
     return <ul className="todo-list">{elements}</ul>
   }
 }
