@@ -7,26 +7,52 @@ export default class NewTaskForm extends Component {
     super(props)
     this.state = {
       value: '',
+      min: '',
+      sec: '',
     }
   }
 
   handleChange = (e) => {
-    this.setState({ value: e.target.value })
+    const value = e.target.value
+    const name = e.target.name
+    this.setState({ [name]: value })
   }
 
   handleSubmit = (e) => {
-    e.preventDefault()
-    this.props.onAdd(this.state.value)
-    e.target[0].value = ''
+    if (e.key === 'Enter') {
+      this.props.onAdd(this.state.value, new Date(0, 0, 0, 0, this.state.min, this.state.sec))
+      this.setState({ value: '', min: '', sec: '' })
+    }
+
+    //e.preventDefault()
+    //this.props.onAdd(this.state.value, new Date(0, 0, 0, 0, this.state.min, this.state.sec))
+    //e.target[0].value = ''
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form className="new-todo-form" onKeyDown={this.handleSubmit}>
         <input
           className="new-todo"
+          name="value"
           placeholder="What needs to be done?"
-          defaultValue={this.state.value}
+          value={this.state.value}
+          onChange={this.handleChange}
+        />
+        <input
+          className="new-todo-form__timer"
+          name="min"
+          value={this.state.min}
+          placeholder="Min"
+          autoFocus
+          onChange={this.handleChange}
+        />
+        <input
+          className="new-todo-form__timer"
+          name="sec"
+          value={this.state.sec}
+          placeholder="Sec"
+          autoFocus
           onChange={this.handleChange}
         />
       </form>
