@@ -19,14 +19,10 @@ export default class NewTaskForm extends Component {
   }
 
   handleSubmit = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && this.state.value) {
       this.props.onAdd(this.state.value, new Date(0, 0, 0, 0, this.state.min, this.state.sec))
       this.setState({ value: '', min: '', sec: '' })
     }
-
-    //e.preventDefault()
-    //this.props.onAdd(this.state.value, new Date(0, 0, 0, 0, this.state.min, this.state.sec))
-    //e.target[0].value = ''
   }
 
   render() {
@@ -42,6 +38,8 @@ export default class NewTaskForm extends Component {
         <input
           className="new-todo-form__timer"
           name="min"
+          type="number"
+          max={59}
           value={this.state.min}
           placeholder="Min"
           autoFocus
@@ -50,6 +48,8 @@ export default class NewTaskForm extends Component {
         <input
           className="new-todo-form__timer"
           name="sec"
+          type="number"
+          max={59}
           value={this.state.sec}
           placeholder="Sec"
           autoFocus

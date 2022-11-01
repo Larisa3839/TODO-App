@@ -38,7 +38,7 @@ export default class TaskList extends Component {
   }
 
   render() {
-    const { todos, onDeleted, onToggleDone } = this.props
+    const { todos, onDeleted, onToggleDone, updateTimer } = this.props
     const { id, edit, description } = this.state
 
     const elements = todos.map((item) => {
@@ -55,7 +55,13 @@ export default class TaskList extends Component {
 
       const task = !editForm ? (
         <li key={item.id} className={classNames}>
-          <Task {...item} onDeleted={onDeleted} onToggleDone={onToggleDone} clickEditTask={this.clickEditTask} />
+          <Task
+            {...item}
+            updateTimer={updateTimer}
+            onDeleted={onDeleted}
+            onToggleDone={onToggleDone}
+            clickEditTask={this.clickEditTask}
+          />
         </li>
       ) : null
 

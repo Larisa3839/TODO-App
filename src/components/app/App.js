@@ -77,6 +77,17 @@ export default class App extends Component {
     })
   }
 
+  updateTimer = (timer, id) => {
+    this.setState(({ todoData }) => {
+      const index = todoData.findIndex((item) => item.id === id)
+      let copyArrData = [...todoData]
+      copyArrData[index].timer = new Date(timer)
+      return {
+        todoData: copyArrData,
+      }
+    })
+  }
+
   render() {
     const { todoData, filter } = this.state
 
@@ -101,6 +112,7 @@ export default class App extends Component {
             todos={todos}
             onToggleDone={this.toggleDone}
             onSaveItem={this.saveItem}
+            updateTimer={this.updateTimer}
           />
           <Footer
             filter={filter}

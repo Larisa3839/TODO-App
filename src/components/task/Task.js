@@ -10,8 +10,11 @@ export default class Task extends Component {
     play: false,
   }
 
-  onPlay = (bool) => {
-    this.setState({ play: bool })
+  onPlay = (bool, timer) => {
+    if (!this.props.done) {
+      this.setState({ play: bool })
+      this.props.updateTimer(timer, this.props.id)
+    }
   }
 
   render() {

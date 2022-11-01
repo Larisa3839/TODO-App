@@ -30,18 +30,18 @@ export default class Timer extends Component {
 
   play = (e) => {
     e.stopPropagation()
-    this.props.onPlay(true)
+    this.props.onPlay(true, this.state.value)
   }
 
   stop = (e) => {
     e.stopPropagation()
     clearInterval(this.interval)
-    this.props.onPlay(false)
+    this.props.onPlay(false, this.state.value)
   }
 
   tick = () => {
     const value = new Date(this.state.value)
-    this.setState({ value: new Date(value.setSeconds(value.getSeconds() + 1)) })
+    this.setState({ value: new Date(value.setSeconds(value.getSeconds() - 1)) })
   }
 
   render() {
@@ -49,7 +49,7 @@ export default class Timer extends Component {
       <span className="description">
         <button className="icon icon-play" onClick={this.play}></button>
         <button className="icon icon-pause" onClick={this.stop}></button>
-        {format(new Date(this.state.value), 'H:m:ss')}
+        {format(new Date(this.state.value), 'm:ss')}
       </span>
     )
   }
