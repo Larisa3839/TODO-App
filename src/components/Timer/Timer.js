@@ -15,13 +15,6 @@ export default class Timer extends Component {
     if (prevProps.play !== this.props.play && this.props.play !== false) {
       this.interval = setInterval(() => this.tick(), 1000)
     }
-    if (prevProps.play !== this.props.play) {
-      const data = JSON.parse(localStorage.data).map((item) => {
-        if (item.id === this.props.id) item.timer = this.state.value
-        return item
-      })
-      localStorage.data = JSON.stringify(data)
-    }
   }
 
   componentWillUnmount() {
