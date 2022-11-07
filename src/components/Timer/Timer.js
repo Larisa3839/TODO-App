@@ -23,18 +23,29 @@ export default class Timer extends Component {
 
   play = (e) => {
     e.stopPropagation()
-    this.props.onPlay(true, this.state.value)
+    this.props.onPlay(true)
   }
 
   stop = (e) => {
     e.stopPropagation()
     clearInterval(this.interval)
-    this.props.onPlay(false, this.state.value)
+    this.props.onPlay(false)
   }
 
   tick = () => {
     const value = new Date(this.state.value)
-    this.setState({ value: new Date(value.setSeconds(value.getSeconds() - 1)) })
+    if (format(value, 'm:ss') === '0:00') {
+      clearInterval(this.interval)
+      this.props.onPlay(false)
+      return
+    }
+    this.setState(() => {
+      const newTime = new Date(value.setSeconds(value.getSeconds() - 1))
+      this.props.updateTimer(newTime, this.props.id)
+      return {
+        value: newTime,
+      }
+    })
   }
 
   render() {

@@ -10,21 +10,20 @@ export default class Task extends Component {
     play: false,
   }
 
-  onPlay = (bool, timer) => {
+  onPlay = (bool) => {
     if (!this.props.done) {
       this.setState({ play: bool })
-      this.props.updateTimer(timer, this.props.id)
     }
   }
 
   render() {
-    const { id, description, timer, create, done, onToggleDone, clickEditTask, onDeleted } = this.props
+    const { id, description, timer, create, done, onToggleDone, clickEditTask, onDeleted, updateTimer } = this.props
     return (
       <div className="view">
         <input className="toggle" type="checkbox" checked={done} onChange={() => onToggleDone(id)} />
         <label htmlFor={id} onClick={() => onToggleDone(id)}>
           <span className="title">{description}</span>
-          <Timer timer={timer} onPlay={this.onPlay} play={this.state.play} id={id} />
+          <Timer timer={timer} onPlay={this.onPlay} play={this.state.play} id={id} updateTimer={updateTimer} />
           <span className="description">{formatDistanceToNow(new Date(create))}</span>
         </label>
         <button
