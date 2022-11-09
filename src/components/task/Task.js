@@ -10,6 +10,10 @@ export default class Task extends Component {
     play: false,
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.done !== this.props.done && this.props.done) this.setState({ play: false })
+  }
+
   onPlay = (bool) => {
     if (!this.props.done) {
       this.setState({ play: bool })

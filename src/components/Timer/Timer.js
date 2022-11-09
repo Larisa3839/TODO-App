@@ -5,20 +5,27 @@ import './Timer.css'
 export default class Timer extends Component {
   state = {
     value: new Date(),
+    interval: null,
   }
 
   componentDidMount() {
-    this.setState({ value: this.props.timer })
+    this.setState({ value: new Date(this.props.timer) })
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.value !== this.state.value && format(this.state.value, 'm:ss') === '0:00') {
+      this.setState({ interval: clearInterval(this.state.interval) })
+    }
     if (prevProps.play !== this.props.play && this.props.play !== false) {
-      this.interval = setInterval(() => this.tick(), 1000)
+      this.setState({ interval: setInterval(() => this.tick(), 1000) })
+    }
+    if (prevProps.play !== this.props.play && this.props.play === false) {
+      this.setState({ interval: clearInterval(this.state.interval) })
     }
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval)
+    this.setState({ interval: clearInterval(this.state.interval) })
   }
 
   play = (e) => {
@@ -28,17 +35,12 @@ export default class Timer extends Component {
 
   stop = (e) => {
     e.stopPropagation()
-    clearInterval(this.interval)
+    this.setState({ interval: clearInterval(this.state.interval) })
     this.props.onPlay(false)
   }
 
   tick = () => {
     const value = new Date(this.state.value)
-    if (format(value, 'm:ss') === '0:00') {
-      clearInterval(this.interval)
-      this.props.onPlay(false)
-      return
-    }
     this.setState(() => {
       const newTime = new Date(value.setSeconds(value.getSeconds() - 1))
       this.props.updateTimer(newTime, this.props.id)

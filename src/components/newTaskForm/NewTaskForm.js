@@ -13,9 +13,9 @@ export default class NewTaskForm extends Component {
   }
 
   handleChange = (e) => {
-    const value = e.target.value
     const name = e.target.name
-    this.setState({ [name]: value })
+    const value = e.target.value
+    this.setState({ [name]: value && name !== 'value' ? value.match(/\d/g).join('') : value })
   }
 
   handleSubmit = (e) => {
