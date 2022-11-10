@@ -16,10 +16,7 @@ export default class Timer extends Component {
     if (prevState.value !== this.state.value && format(this.state.value, 'm:ss') === '0:00') {
       this.setState({ interval: clearInterval(this.state.interval) })
     }
-    if (prevProps.play !== this.props.play && this.props.play !== false) {
-      this.setState({ interval: setInterval(() => this.tick(), 1000) })
-    }
-    if (prevProps.play !== this.props.play && this.props.play === false) {
+    if (prevProps.play !== this.props.play && !this.props.play) {
       this.setState({ interval: clearInterval(this.state.interval) })
     }
   }
@@ -31,6 +28,7 @@ export default class Timer extends Component {
   play = (e) => {
     e.stopPropagation()
     this.props.onPlay(true)
+    this.setState({ interval: setInterval(() => this.tick(), 1000) })
   }
 
   stop = (e) => {
