@@ -1,8 +1,61 @@
-import { Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { format } from 'date-fns'
 import './Timer.css'
 
-export default class Timer extends Component {
+const Timer = (props) => {
+  const [value, setValue] = useState(new Date())
+  const [interval, setIntervalTimer] = useState(null)
+  const intervalRef = useRef()
+
+  useEffect(() => {
+    intervalRef.current = interval
+    setValue(new Date(props.timer))
+    return () => setIntervalTimer(clearInterval(intervalRef.current))
+  }, [])
+
+  useEffect(() => {
+    if (format(value, 'm:ss') === '0:00') {
+      setIntervalTimer(clearInterval(interval))
+    }
+  }, [value])
+
+  useEffect(() => {
+    if (!props.play) {
+      setIntervalTimer(clearInterval(interval))
+    }
+  })
+
+  const play = (e) => {
+    e.stopPropagation()
+    props.onPlay(true)
+    intervalRef.current = setInterval(() => tick(value), 1000)
+    setIntervalTimer(intervalRef.current)
+  }
+
+  const stop = (e) => {
+    e.stopPropagation()
+    setIntervalTimer(clearInterval(interval))
+    props.onPlay(false)
+  }
+
+  const tick = (timeValue) => {
+    const newTime = new Date(timeValue.setSeconds(timeValue.getSeconds() - 1))
+    props.updateTimer(newTime, props.id)
+    setValue(newTime)
+  }
+
+  return (
+    <span className="description">
+      <button className="icon icon-play" onClick={play}></button>
+      <button className="icon icon-pause" onClick={stop}></button>
+      {format(new Date(value), 'm:ss')}
+    </span>
+  )
+}
+
+export default Timer
+
+/*export default class Timer extends Component {
   state = {
     value: new Date(),
     interval: null,
@@ -57,4 +110,4 @@ export default class Timer extends Component {
       </span>
     )
   }
-}
+}*/

@@ -1,8 +1,28 @@
-import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './TasksFilter.css'
 
-export default class TasksFilter extends Component {
+const TasksFilter = (props) => {
+  const buttons = ['All', 'Active', 'Completed']
+  const filterChange = (name) => {
+    props.onFilterChenge(name)
+  }
+
+  const filterButtons = buttons.map((el) => {
+    const classNames = el === props.filter ? 'selected' : ''
+    return (
+      <li key={el}>
+        <button type="button" className={classNames} onClick={() => filterChange(el)}>
+          {el}
+        </button>
+      </li>
+    )
+  })
+
+  return <ul className="filters">{filterButtons}</ul>
+}
+
+export default TasksFilter
+/*export default class TasksFilter extends Component {
   state = {
     buttons: ['All', 'Active', 'Completed'],
   }
@@ -10,6 +30,7 @@ export default class TasksFilter extends Component {
   filterChange = (name) => {
     this.props.onFilterChenge(name)
   }
+
 
   render() {
     const { buttons } = this.state
@@ -27,7 +48,7 @@ export default class TasksFilter extends Component {
 
     return <ul className="filters">{filterButtons}</ul>
   }
-}
+}*/
 
 TasksFilter.defaultProps = {
   onFilterChenge: () => {},
