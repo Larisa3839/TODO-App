@@ -3,27 +3,20 @@ import { format } from 'date-fns'
 import './Timer.css'
 
 const Timer = (props) => {
-  const [value, setValue] = useState(new Date())
+  const [value] = useState(props.timer)
   const [interval, setIntervalTimer] = useState(null)
 
-  useEffect(() => setValue(new Date(props.timer)), [])
   useEffect(() => () => clearTimeout(interval), [interval])
 
   useEffect(() => {
-    if (format(value, 'm:ss') === '0:00') {
-      setIntervalTimer(clearInterval(interval))
-    }
-  }, [value])
-
-  useEffect(() => {
     if (!props.play) setIntervalTimer(clearInterval(interval))
-  })
+  }, [props.play])
 
   const play = (e) => {
     e.stopPropagation()
-    if (format(value, 'm:ss') === '0:00') return
+    if (!value.getSeconds() && !value.getMinutes()) return
     props.onPlay(true)
-    setIntervalTimer(setInterval(() => tick(value), 1000))
+    setIntervalTimer(setInterval(() => tick(), 1000))
   }
 
   const stop = (e) => {
@@ -32,17 +25,18 @@ const Timer = (props) => {
     props.onPlay(false)
   }
 
-  const tick = (timeValue) => {
-    const newTime = new Date(timeValue.setSeconds(timeValue.getSeconds() - 1))
-    setValue(newTime)
+  const tick = () => {
+    const newTime = value.setSeconds(value.getSeconds() - 1)
     props.updateTimer(newTime, props.id)
   }
 
+  const playButton = !props.play && !props.done ? <button className="icon icon-play" onClick={play}></button> : null
+  const pauseButton = props.play ? <button className="icon icon-pause" onClick={stop}></button> : null
   return (
     <span className="description">
-      <button className="icon icon-play" onClick={play}></button>
-      <button className="icon icon-pause" onClick={stop}></button>
-      {format(new Date(value), 'm:ss')}
+      {playButton}
+      {pauseButton}
+      <span>{format(value, 'm:ss')}</span>
     </span>
   )
 }

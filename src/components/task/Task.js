@@ -12,6 +12,10 @@ const Task = (props) => {
     if (props.done) setPlay(false)
   }, [props.done])
 
+  useEffect(() => {
+    if (!props.timer.getSeconds() && !props.timer.getMinutes()) setPlay(false)
+  }, [props.timer])
+
   const onPlay = (bool) => {
     if (!props.done) setPlay(bool)
   }
@@ -23,7 +27,7 @@ const Task = (props) => {
       <input className="toggle" type="checkbox" checked={done} onChange={() => onToggleDone(id)} />
       <label htmlFor={id} onClick={() => onToggleDone(id)}>
         <span className="title">{description}</span>
-        <Timer timer={timer} onPlay={onPlay} play={play} id={id} updateTimer={updateTimer} />
+        <Timer timer={timer} onPlay={onPlay} play={play} id={id} done={done} updateTimer={updateTimer} />
         <span className="description">{formatDistanceToNow(new Date(create))}</span>
       </label>
       <button

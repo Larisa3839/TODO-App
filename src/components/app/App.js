@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import NewTaskForm from '../NewTaskForm'
@@ -10,17 +10,6 @@ import './App.css'
 const App = () => {
   const [todoData, setTodoData] = useState([])
   const [filter, setFilter] = useState('All')
-
-  useEffect(() => {
-    if (localStorage.data) {
-      const data = JSON.parse(localStorage.data)
-      setTodoData(data)
-    } else localStorage.setItem('data', '')
-  }, [])
-
-  useEffect(() => {
-    localStorage.data = JSON.stringify(todoData)
-  }, [todoData])
 
   const createItem = (text, date, time) => {
     return {
@@ -40,12 +29,8 @@ const App = () => {
     setTodoData(todoData.filter((item) => !item.done))
   }
 
-  const toggleDone = (id) => {
-    const index = todoData.findIndex((item) => item.id === id)
-    let newArrData = [...todoData]
-    newArrData[index].done = !todoData[index].done
-    setTodoData(newArrData)
-  }
+  const toggleDone = (id) =>
+    setTodoData((prevState) => prevState.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : todo)))
 
   const delleteItem = (id) => {
     setTodoData(todoData.filter((item) => item.id !== id))
@@ -56,19 +41,11 @@ const App = () => {
     setTodoData([...todoData, newItem])
   }
 
-  const saveItem = (text, id) => {
-    const index = todoData.findIndex((item) => item.id === id)
-    let copyArrData = [...todoData]
-    copyArrData[index].description = text
-    setTodoData(copyArrData)
-  }
+  const saveItem = (text, id) =>
+    setTodoData((prevState) => prevState.map((todo) => (todo.id === id ? { ...todo, description: text } : todo)))
 
-  const updateTimer = (timer, id) => {
-    const index = todoData.findIndex((item) => item.id === id)
-    let copyArrData = [...todoData]
-    copyArrData[index].timer = new Date(timer)
-    localStorage.data = JSON.stringify(copyArrData)
-  }
+  const updateTimer = (timer, id) =>
+    setTodoData((prevState) => prevState.map((todo) => (todo.id === id ? { ...todo, timer: new Date(timer) } : todo)))
 
   const filterNotes = {
     All: todoData,
